@@ -1,3 +1,11 @@
+//TODO:
+// use:  is ascii_lowercase or uppercase
+// or
+// use:  use HEX 0x20 0010 0000
+
+// replace loops will iterative methods
+// rewrite from_str . Error should be boxed
+
 #[cfg(test)]
 pub mod tests {
     use crate::chunk_types::ChunkType;
