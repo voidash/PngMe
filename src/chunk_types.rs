@@ -8,7 +8,7 @@ pub struct ChunkType {
 impl FromStr for ChunkType {
 
     type Err = &'static str;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
+    fn from_str(s: &str) -> Result<Self, &'static str> {
         if s.len() != 4  {
             return Err("Chunk Length should be of length 4.");
         }

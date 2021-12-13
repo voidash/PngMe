@@ -2,7 +2,6 @@
 pub mod tests {
     // use crate::chunk_types::ChunkType; 
     use crate::chunk::Chunk;
-    use std::str::FromStr;
 
     fn testing_chunk() -> Chunk {
         let data_length: u32 = 42;
@@ -18,7 +17,6 @@ pub mod tests {
             .chain(crc.to_be_bytes().iter())
             .copied()
             .collect();
-        
         Chunk::try_from(chunk_data.as_ref()).unwrap()
     }
 

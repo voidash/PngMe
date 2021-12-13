@@ -1,7 +1,6 @@
 // mod args;
-// mod chunk;
-mod chunk_types;
 mod chunk;
+mod chunk_types;
 // mod commands;
 // mod png;
 mod test;
