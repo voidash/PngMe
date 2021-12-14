@@ -5,9 +5,9 @@ use std::fmt::{Display};
 use crate::chunk_types::ChunkType;
 
 pub struct Chunk {
-    chunk_data: Vec<u8>,
-    chunk_type: ChunkType,
-    crc: u32,
+    pub chunk_data: Vec<u8>,
+    pub chunk_type: ChunkType,
+    pub crc: u32,
 }
 
 impl TryFrom<&[u8]> for Chunk {
@@ -57,6 +57,14 @@ impl Display for Chunk {
 }
 
 impl Chunk {
+    pub fn new(chunk_data: &[u8], chunk_type: ChunkType, crc: u32 ) -> Self {
+        Self {
+            chunk_data: chunk_data.to_vec(),
+            chunk_type: chunk_type,
+            crc: crc
+        } 
+    }
+
     pub fn length(&self) -> u32 {
          self.chunk_data.len() as u32
     }
@@ -81,6 +89,12 @@ impl Chunk {
     }
 
     pub fn as_bytes(&self) -> Vec<u8> {
-        self.chunk_data.clone()
+        let length = self.chunk_data.len().to_be_bytes();
+        length.iter()
+        .chain( self.chunk_type.bytes().iter())
+        .chain( self.chunk_data.iter())
+        .chain( self.crc.to_be_bytes().iter())
+        .copied()
+        .collect()
     }
 }

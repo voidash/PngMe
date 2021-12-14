@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::chunk_type::ChunkType;
+    use crate::png::Png;
+    use crate::chunk_types::ChunkType;
     use crate::chunk::Chunk;
     use std::str::FromStr;
     use std::convert::TryFrom;
@@ -21,13 +21,12 @@ mod tests {
         Png::from_chunks(chunks)
     }
 
-    fn chunk_from_strings(chunk_type: &str, data: &str) -> Result<Chunk> {
-        use std::str::FromStr;
+    fn chunk_from_strings(chunk_type: &str, data: &str) -> Result<Chunk,&'static str> {
 
         let chunk_type = ChunkType::from_str(chunk_type)?;
         let data: Vec<u8> = data.bytes().collect();
-
-        Ok(Chunk::new(chunk_type, data))
+        let crc: u32 = 12;
+        Ok(Chunk::new(data.as_slice(), chunk_type,crc))
     }
 
     #[test]
@@ -160,7 +159,7 @@ mod tests {
 
         let png: Png = TryFrom::try_from(bytes.as_ref()).unwrap();
 
-        let _png_string = format!("{}", png);
+        // let _png_string = format!("{}", png);
     }
 
     // This is the raw bytes for a shrunken version of the `dice.png` image on Wikipedia
