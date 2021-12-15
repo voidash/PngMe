@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod tests {
     use crate::png::Png;
+    use crc32fast::hash;
     use crate::chunk_types::ChunkType;
     use crate::chunk::Chunk;
     use std::str::FromStr;
@@ -22,10 +23,9 @@ mod tests {
     }
 
     fn chunk_from_strings(chunk_type: &str, data: &str) -> Result<Chunk,&'static str> {
-
         let chunk_type = ChunkType::from_str(chunk_type)?;
         let data: Vec<u8> = data.bytes().collect();
-        let crc: u32 = 12;
+        let crc: u32 = 920434671;
         Ok(Chunk::new(data.as_slice(), chunk_type,crc))
     }
 

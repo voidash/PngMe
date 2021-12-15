@@ -1,4 +1,3 @@
-
 use crate::chunk::Chunk;
 pub struct Png {
     header: [u8;8],
@@ -11,27 +10,36 @@ impl TryFrom<&[u8]> for Png {
          let mut chunks : Vec<Chunk> = Vec::new();
          let mut copy_value = value.to_owned().into_iter().peekable();
          let standard_header: Vec<_> = copy_value.by_ref().take(8).collect();
-         if standard_header.as_slice() != Png::STANDARD_HEADER {
+         println!("{:?}",standard_header);
+         if standard_header != Png::STANDARD_HEADER {
              return Err("Not a PNG file");
          }
 
          // collection of chunks? 
          while copy_value.peek().is_some() {
              let chunk_length_bytes : Vec<_> = copy_value.by_ref().take(4).collect();
-             let len_chunk_usize = usize::from_be_bytes(chunk_length_bytes.as_slice().try_into().unwrap());
-             let chunk : Vec<_> = copy_value.by_ref().take(len_chunk_usize).collect();
+            //  println!("{:?}",chunk_length_bytes);
+             let mut len_chunk_u32 = u32::from_be_bytes(chunk_length_bytes.clone().try_into().unwrap());
+             //add crc
+             len_chunk_u32 += 8;
+             let chunk : Vec<_> = copy_value.by_ref().take((len_chunk_u32) as usize).collect();
 
              let found_chunk: Vec<u8> = chunk_length_bytes
                 .iter()
                 .chain(chunk.iter())
                 .copied()
                 .collect();
-
-             let ch_R  = Chunk::try_from(&found_chunk[..]);
+             println!("{:?}",found_chunk);
+             let ch_R  = Chunk::try_from(found_chunk.as_ref());
              match ch_R {
-                 Ok(c) => chunks.push(c),
+                 Ok(c) => {
+
+                    println!("{:?}",c.as_bytes());
+                     chunks.push(c);
+                    },
                  Err(_) => return Err("Invalid Chunk while creating PNG")
              }
+
          }
 
          Ok(Self {
@@ -82,6 +90,7 @@ impl Png {
         let data = self.chunks.iter()
         .map(
             |chunk| {
+                println!("{:?}",chunk.as_bytes());
                 chunk.as_bytes()
             }
         )
@@ -93,6 +102,6 @@ impl Png {
                 .collect()
             }
         );
-        data.unwrap()
+        self.header.iter().chain(data.unwrap().iter()).copied().collect()
     }
 }

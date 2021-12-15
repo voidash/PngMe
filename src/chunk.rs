@@ -23,9 +23,6 @@ impl TryFrom<&[u8]> for Chunk {
         // conversion is possible with to_be_bytes and from_be_bytes
         
         //get the length of message
-        if value.len() < 12 {
-            return Err("Something went wrong");
-        }
         let (u32_message_length_bytes, rest) = value.split_at(std::mem::size_of::<u32>());
         let message_length = u32::from_be_bytes(u32_message_length_bytes.try_into().unwrap());
         let (ctb,message_and_crc) = rest.split_at(4);
@@ -89,8 +86,9 @@ impl Chunk {
     }
 
     pub fn as_bytes(&self) -> Vec<u8> {
-        let length = self.chunk_data.len().to_be_bytes();
-        length.iter()
+
+        let length : u32 = self.chunk_data.len() as u32;
+        return length.to_be_bytes().iter()
         .chain( self.chunk_type.bytes().iter())
         .chain( self.chunk_data.iter())
         .chain( self.crc.to_be_bytes().iter())
