@@ -10,7 +10,7 @@ impl TryFrom<&[u8]> for Png {
          let mut chunks : Vec<Chunk> = Vec::new();
          let mut copy_value = value.to_owned().into_iter().peekable();
          let standard_header: Vec<_> = copy_value.by_ref().take(8).collect();
-         println!("{:?}",standard_header);
+        //  println!("{:?}",standard_header);
          if standard_header != Png::STANDARD_HEADER {
              return Err("Not a PNG file");
          }
@@ -29,12 +29,12 @@ impl TryFrom<&[u8]> for Png {
                 .chain(chunk.iter())
                 .copied()
                 .collect();
-             println!("{:?}",found_chunk);
+            //  println!("{:?}",found_chunk);
              let ch_R  = Chunk::try_from(found_chunk.as_ref());
              match ch_R {
                  Ok(c) => {
 
-                    println!("{:?}",c.as_bytes());
+                    // println!("{:?}",c.as_bytes());
                      chunks.push(c);
                     },
                  Err(_) => return Err("Invalid Chunk while creating PNG")
@@ -90,7 +90,7 @@ impl Png {
         let data = self.chunks.iter()
         .map(
             |chunk| {
-                println!("{:?}",chunk.as_bytes());
+                // println!("{:?}",chunk.as_bytes());
                 chunk.as_bytes()
             }
         )

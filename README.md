@@ -1,5 +1,4 @@
-# My implementation of PngMe Project 
-
+# implementation of PngMe Project 
 
 [PickleNerd](https://picklenerd.github.io/pngme_book/introduction.html)
 
@@ -7,15 +6,23 @@
 - Can encode and Decode secret message to PNG file. 
 
 ```
-pngme encode ./dice.png ruSt "This is a secret message!
+first arg pngimage
+second arg chunkType . 4 letter word , 3rd must be capital for Png Specification
+third arg message 
 
-pngme decode ./dice.png ruSt
+//encodes message
+$ pngme ./icon.png "arYa" "This is a secret message!
 
-pngme remove ./dice.png ruSt
-
-pngme print ./dice.png
+//decodes message
+$ pngme ./icon.png "arYa"
 ```
 
+
+## Building
+
+```
+$ cargo build
+```
 
 ### From PNG specification
 
@@ -33,5 +40,7 @@ Chunk Type is 4 byte array.
  - Safe-to-Copy bit : if uppercase can't copy by photo editors , if lowercase can be copied
 
 
-
-
+## TODO
+- use clap to process command line
+- add link image support
+- finish implementing crc
