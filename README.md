@@ -6,15 +6,18 @@
 - Can encode and Decode secret message to PNG file. 
 
 ```
-first arg pngimage
-second arg chunkType . 4 letter word , 3rd must be capital for Png Specification
-third arg message 
 
-//encodes message
-$ pngme ./icon.png "arYa" "This is a secret message!
+USAGE:
+    pngme [OPTIONS] --mode <MODE> --file <FILE> --chunk <CHUNK>
 
-//decodes message
-$ pngme ./icon.png "arYa"
+OPTIONS:
+    -c, --chunk <CHUNK>        4 character String, 3rd character must be capital
+    -f, --file <FILE>          png file path
+    -h, --help                 Print help information
+    -m, --message <MESSAGE>    message to hide
+        --mode <MODE>          mode: encode or decode
+    -V, --version              Print version information
+
 ```
 
 
@@ -41,6 +44,6 @@ Chunk Type is 4 byte array.
 
 
 ## TODO
-- use clap to process command line
+- [x] use clap to process command line
 - add link image support
 - finish implementing crc
